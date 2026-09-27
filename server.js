@@ -147,7 +147,8 @@ app.use((err,req,res,next)=>{
  res.status(500).json({message:"Erro interno do servidor."});
 });
 async function startServer() {
-  try {
+  try {await q(fs.readFileSync("schema.sql", "utf8"));
+console.log("BANCO DE DADOS INICIALIZADO.");
     if (process.env.RESET_ADMIN_PASSWORD === "true") {
       const password = process.env.ADMIN_INITIAL_PASSWORD;
 
