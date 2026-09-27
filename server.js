@@ -146,4 +146,41 @@ app.use((err,req,res,next)=>{
  if(err instanceof z.ZodError)return res.status(400).json({message:"Dados inválidos.",details:err.issues.map(x=>x.path.join(".")+": "+x.message)});
  res.status(500).json({message:"Erro interno do servidor."});
 });
-app.listen(PORT,()=>console.log(`BlueSales em ${process.env.APP_URL||`http://localhost:${PORT}`}`));
+async function startServer() {
+  try {
+    if (process.env.RESET_ADMIN_PASSWORD === "true") {
+      const password = process.env.ADMIN_INITIAL_PASSWORD;
+
+      if (!password) {
+        throw new Error("ADMIN_INITIAL_PASSWORD não configurada.");
+      }
+
+      const hash = await bcrypt.hash(password, 12);
+
+      const result = await q(
+        `UPDATE users
+         SET password_hash=$1, role='ADMIN', active=true
+         WHERE lower(email)=lower($2)
+         RETURNING id`,
+        [hash, "admin@bluesales.local"]
+      );
+
+      if (result.rowCount === 0) {
+        console.log("Administrador não encontrado.");
+      } else {
+        console.log("SENHA DO ADMINISTRADOR REDEFINIDA COM SUCESSO.");
+      }
+    }
+
+    app.listen(PORT, () =>
+      console.log(
+        `BlueSales em ${process.env.APP_URL || `http://localhost:${PORT}`}`
+      )
+    );
+  } catch (e) {
+    console.error("Erro ao iniciar BlueSales:", e);
+    process.exit(1);
+  }
+}
+
+startServer();
