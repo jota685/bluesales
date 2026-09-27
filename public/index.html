@@ -1,1 +1,238 @@
 
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>BlueSales — Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+:root{
+ --bg:#05070A;--panel:#0B0F14;--panel2:#0e141b;--blue:#1677FF;--blue2:#2491FF;
+ --darkblue:#071A2D;--white:#F5F7FA;--muted:#8B95A5;--line:#1b2430;
+ --success:#27d17f;--warning:#ffb020;--danger:#ff5263;
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}.app{display:flex;min-height:100vh}.sidebar{width:250px;background:#070a0e;border-right:1px solid var(--line);padding:22px 14px;position:fixed;inset:0 auto 0 0;z-index:20;display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:10px;padding:8px 10px 25px;font-weight:800;font-size:19px}.brandmark{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--blue),#0750ba);display:grid;place-items:center;box-shadow:0 0 28px #1677ff38}
+.brandmark:after{content:"B";font-weight:900}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:var(--muted);padding:12px 13px;border-radius:10px;text-align:left;display:flex;gap:12px;align-items:center;cursor:pointer;transition:.2s}.nav button:hover{background:#0d141d;color:var(--white);transform:translateX(2px)}.nav button.active{background:linear-gradient(90deg,#0d3157,#0b1c2e);color:#fff;box-shadow:inset 2px 0 var(--blue)}.nav svg{width:18px}.side-bottom{margin-top:auto;border-top:1px solid var(--line);padding-top:14px}.main{margin-left:250px;width:calc(100% - 250px);padding:28px;max-width:1700px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-bottom:25px}.title h1{margin:0;font-size:27px;letter-spacing:-.5px}.title p{margin:5px 0 0;color:var(--muted);font-size:13px}.top-actions{display:flex;align-items:center;gap:10px}.search{width:245px;background:var(--panel);border:1px solid var(--line);height:42px;border-radius:11px;padding:0 13px;color:#fff;outline:none}.search:focus{border-color:#1c72d8;box-shadow:0 0 0 3px #1677ff16}.iconbtn{width:42px;height:42px;border:1px solid var(--line);background:var(--panel);color:#c9d2de;border-radius:11px;cursor:pointer;position:relative}.dot{position:absolute;right:8px;top:7px;width:6px;height:6px;background:var(--blue2);border-radius:50%;box-shadow:0 0 8px var(--blue2)}.profile{display:flex;align-items:center;gap:9px;padding-left:7px;cursor:pointer}.avatar{width:39px;height:39px;border-radius:50%;background:linear-gradient(135deg,#2491ff,#0a3f89);display:grid;place-items:center;font-weight:800}.profile small{display:block;color:var(--muted);font-size:11px}.profile strong{font-size:13px}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:linear-gradient(145deg,#0c1117,#090d12);border:1px solid var(--line);border-radius:15px;box-shadow:0 10px 35px #00000020}.metric{padding:19px;transition:.2s}.metric:hover,.quick:hover,.secondary:hover{transform:translateY(-2px);border-color:#1b4c80}.metric-head{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.metric-icon{width:35px;height:35px;border-radius:10px;background:#08213a;color:#45a0ff;display:grid;place-items:center}.metric h2{font-size:25px;margin:15px 0 6px;letter-spacing:-.5px}.metric p{margin:0;color:var(--muted);font-size:12px}.growth{color:#43d88d;font-size:11px;margin-top:13px;display:inline-block}
+.grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.75fr);gap:15px;margin-top:15px}.chart-card{padding:20px}.card-title{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}.card-title h3{margin:0;font-size:16px}.card-title p{margin:5px 0 0;color:var(--muted);font-size:12px}.periods{display:flex;gap:4px;flex-wrap:wrap}.periods button{background:transparent;border:1px solid transparent;color:var(--muted);border-radius:8px;padding:7px 8px;font-size:11px;cursor:pointer}.periods button:hover,.periods button.active{background:#0c243d;color:#fff;border-color:#164a78}.chart-wrap{height:315px;margin-top:18px}.quick-card{padding:20px}.quick-list{display:grid;gap:10px;margin-top:17px}.quick{padding:13px;border:1px solid var(--line);background:#0b1016;border-radius:11px;color:#fff;display:flex;align-items:center;gap:11px;cursor:pointer;text-align:left;transition:.2s}.quick .qicon{width:34px;height:34px;border-radius:9px;background:#0b2946;color:#43a0ff;display:grid;place-items:center}.quick small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.section-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:15px;margin-top:15px}.table-card{padding:20px;overflow:hidden}.table-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.table-title h3{font-size:16px;margin:0}.viewall{font-size:11px;color:#4ca4ff;cursor:pointer}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:500px}th,td{padding:12px 8px;border-bottom:1px solid #17202b;text-align:left;font-size:12px}th{color:#6f7c8c;font-weight:600}td{color:#d9e0e8}.product{display:flex;align-items:center;gap:9px}.picon{width:30px;height:30px;border-radius:8px;background:#10263b;display:grid;place-items:center;color:#53a9ff;font-weight:800}.progress{height:5px;width:65px;background:#17212c;border-radius:20px;overflow:hidden}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--blue2));border-radius:20px}.badge{display:inline-flex;padding:5px 8px;border-radius:7px;font-size:10px;font-weight:700}.paid{color:#46dc91;background:#0b2c20}.pending{color:#ffc557;background:#30270f}.cancelled{color:#ff6676;background:#32151a}
+.secondary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-top:15px}.secondary{padding:17px;transition:.2s}.secondary span{font-size:11px;color:var(--muted)}.secondary strong{display:block;font-size:22px;margin:8px 0}.spark{height:5px;background:#17212c;border-radius:10px;overflow:hidden}.spark i{display:block;height:100%;background:var(--blue);border-radius:10px}.page{display:none}.page.active{display:block}.toast{position:fixed;right:22px;bottom:22px;background:#101820;border:1px solid #1d3c5c;padding:13px 16px;border-radius:11px;box-shadow:0 15px 45px #0008;z-index:100;transform:translateY(20px);opacity:0;pointer-events:none;transition:.25s;font-size:12px}.toast.show{transform:translateY(0);opacity:1}.mobile-toggle{display:none}
+.modal-backdrop{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:90}.modal{width:min(470px,calc(100% - 30px));background:#0b1016;border:1px solid var(--line);border-radius:16px;padding:21px;box-shadow:0 30px 80px #000}.modal.show{}.modal h3{margin:0 0 8px}.modal p{color:var(--muted);font-size:12px;line-height:1.6}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.btn{border:1px solid var(--line);background:#111821;color:#fff;padding:9px 13px;border-radius:9px;cursor:pointer}.btn.primary{background:var(--blue);border-color:var(--blue)}
+.admin-panel{padding:20px}.role-pill{display:inline-flex;padding:5px 9px;border-radius:7px;background:#0b2d4f;color:#55a9ff;font-size:11px;font-weight:700}.setting{display:flex;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--line)}.setting:last-child{border:0}.setting span{color:var(--muted);font-size:12px}.lock{color:#697789;font-size:11px}
+@media(max-width:1100px){.metrics{grid-template-columns:repeat(2,1fr)}.grid,.section-grid{grid-template-columns:1fr}.secondary-grid{grid-template-columns:repeat(2,1fr)}.search{width:190px}}
+@media(max-width:760px){.sidebar{transform:translateX(-100%);transition:.25s;width:260px}.sidebar.open{transform:none}.main{margin-left:0;width:100%;padding:18px}.mobile-toggle{display:grid}.topbar{align-items:flex-start}.top-actions{flex-wrap:wrap;justify-content:flex-end}.profile div:last-child{display:none}.search{order:5;width:100%}.metrics{grid-template-columns:1fr}.secondary-grid{grid-template-columns:1fr 1fr}.chart-wrap{height:250px}.card-title{flex-direction:column}.periods{width:100%}}
+@media(max-width:450px){.secondary-grid{grid-template-columns:1fr}.topbar{gap:10px}.title h1{font-size:23px}}
+
+.login-screen{position:fixed;inset:0;z-index:999;background:radial-gradient(circle at 50% 20%,#09213a 0,#05070a 42%);display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{width:min(420px,100%);background:#0b1016;border:1px solid #1b2430;border-radius:18px;padding:30px;box-shadow:0 30px 100px #000b}
+.login-brand{padding:0 0 28px}.login-card h1{font-size:25px;margin:0 0 8px}.login-card>p{color:#8b95a5;font-size:13px;margin:0 0 25px}.login-card label{display:block;color:#aeb8c5;font-size:12px;margin:15px 0}.login-card input{display:block;width:100%;height:45px;margin-top:7px;background:#070b10;border:1px solid #1b2430;border-radius:10px;color:#fff;padding:0 12px;outline:none}.login-card input:focus{border-color:#1677ff;box-shadow:0 0 0 3px #1677ff19}.login-btn{width:100%;height:45px;margin-top:8px}.login-error{color:#ff6877;font-size:12px;min-height:18px;margin-top:12px}.demo-hint{display:block;color:#657384;font-size:10px;line-height:1.6;margin-top:20px}.demo-hint b{color:#8da0b5}
+.user-menu{position:fixed;right:25px;top:78px;background:#0c1219;border:1px solid #1b2430;border-radius:12px;padding:7px;z-index:70;display:none;min-width:170px;box-shadow:0 20px 50px #0009}.user-menu button{width:100%;border:0;background:transparent;color:#d9e0e8;padding:10px;text-align:left;border-radius:8px;cursor:pointer}.user-menu button:hover{background:#11253a}
+</style>
+</head>
+<body>
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="brand login-brand"><div class="brandmark"></div>BlueSales</div>
+    <h1>Bem-vindo de volta</h1>
+    <p>Entre na sua conta para acessar o painel de vendas.</p>
+    <form id="loginForm">
+      <label>E-mail<input id="loginEmail" type="email" autocomplete="email" placeholder="admin@bluesales.local" required></label>
+      <label>Senha<input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" required></label>
+      <button class="btn primary login-btn" type="submit">Entrar</button>
+      <div id="loginError" class="login-error"></div>
+    </form>
+    <small class="demo-hint">Administrador inicial: <b>admin@bluesales.local</b> / <b>Admin@123</b><br>Troque a senha após o primeiro acesso.</small>
+  </div>
+</div>
+
+<div class="app">
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><div class="brandmark"></div>BlueSales</div>
+  <nav class="nav" id="nav">
+    <button class="active" data-page="dashboard">◈ <span>Dashboard</span></button>
+    <button data-page="sales">↗ <span>Vendas</span></button>
+    <button data-page="products">▣ <span>Produtos</span></button>
+    <button data-page="customers">♙ <span>Clientes</span></button>
+    <button data-page="orders">▤ <span>Pedidos</span></button>
+    <button data-page="finance">R$ <span>Financeiro</span></button>
+    <button data-page="reports">▥ <span>Relatórios</span></button>
+    <button data-page="settings">⚙ <span>Configurações</span></button>
+  </nav>
+  <div class="side-bottom">
+    <button class="nav" style="width:100%;border:0;background:none;color:var(--muted);padding:10px;text-align:left;cursor:pointer" onclick="switchRole()">⇄ <span>Alternar demonstração</span></button>
+  </div>
+</aside>
+
+<main class="main">
+<header class="topbar">
+  <div style="display:flex;gap:10px;align-items:flex-start">
+    <button class="iconbtn mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <div class="title"><h1 id="pageTitle">Dashboard</h1><p id="pageSub">Visão geral do seu negócio</p></div>
+  </div>
+  <div class="top-actions">
+    <input class="search" id="search" placeholder="Pesquisar..." aria-label="Pesquisar">
+    <button class="iconbtn" onclick="showToast('Você não tem novas notificações')">♢<i class="dot"></i></button>
+    <div class="profile" onclick="openUserMenu()"><div class="avatar" id="avatar">JF</div><div><strong id="userName">João Felipe</strong><small id="roleText">Administrador</small></div></div>
+  </div>
+</header>
+
+<section id="dashboard" class="page active">
+<div class="metrics">
+ <div class="card metric"><div class="metric-head"><span>FATURAMENTO TOTAL</span><div class="metric-icon">R$</div></div><h2>R$ 107.138,54</h2><p>Valor acumulado</p><span class="growth">↑ +12,5% no período</span></div>
+ <div class="card metric"><div class="metric-head"><span>RECORRÊNCIA MENSAL</span><div class="metric-icon">↻</div></div><h2>R$ 5.310,93</h2><p>8 contratos assinados</p><span class="growth">↑ +8,2% no período</span></div>
+ <div class="card metric"><div class="metric-head"><span>TICKET MÉDIO</span><div class="metric-icon">⌁</div></div><h2>R$ 2.329,10</h2><p>46 vendas realizadas</p><span class="growth">↑ +5,7% no período</span></div>
+ <div class="card metric"><div class="metric-head"><span>TOTAL DE VENDAS</span><div class="metric-icon">↗</div></div><h2>46</h2><p>vendas realizadas</p><span class="growth">↑ +14,1% no período</span></div>
+</div>
+<div class="grid">
+ <div class="card chart-card">
+  <div class="card-title"><div><h3>Visão geral do faturamento</h3><p>Dados demonstrativos ao longo do período selecionado</p></div><div class="periods" id="periods">
+   <button data-range="today">Hoje</button><button data-range="7">7 dias</button><button class="active" data-range="30">30 dias</button><button data-range="6m">6 meses</button><button data-range="1y">1 ano</button><button data-range="all">Todo período</button>
+  </div></div>
+  <div class="chart-wrap"><canvas id="revenueChart"></canvas></div>
+ </div>
+ <div class="card quick-card"><div class="card-title"><div><h3>Ações rápidas</h3><p>Atalhos para sua operação</p></div></div>
+  <div class="quick-list">
+   <button class="quick" onclick="quickAction('Criar produto')"><div class="qicon">+</div><div><b>Criar produto</b><small>Novo item no catálogo</small></div></button>
+   <button class="quick" onclick="quickAction('Adicionar cliente')"><div class="qicon">♙</div><div><b>Adicionar cliente</b><small>Cadastrar novo cliente</small></div></button>
+   <button class="quick" onclick="quickAction('Criar proposta')"><div class="qicon">✎</div><div><b>Criar proposta</b><small>Enviar uma nova proposta</small></div></button>
+   <button class="quick" onclick="quickAction('Registrar venda')"><div class="qicon">↗</div><div><b>Registrar venda</b><small>Lançar venda manualmente</small></div></button>
+  </div>
+ </div>
+</div>
+<div class="section-grid">
+ <div class="card table-card"><div class="table-title"><h3>Top produtos</h3><span class="viewall" onclick="go('products')">Ver todos →</span></div><div class="table-wrap"><table><thead><tr><th>Produto</th><th>Vendas</th><th>Receita</th><th>Conversão</th></tr></thead><tbody>
+ <tr><td><div class="product"><div class="picon">A</div>Automação Pro</div></td><td>18</td><td>R$ 42.210</td><td><div class="progress"><i style="width:88%"></i></div></td></tr>
+ <tr><td><div class="product"><div class="picon">C</div>Consultoria Growth</div></td><td>11</td><td>R$ 31.900</td><td><div class="progress"><i style="width:71%"></i></div></td></tr>
+ <tr><td><div class="product"><div class="picon">S</div>Site Premium</div></td><td>9</td><td>R$ 18.990</td><td><div class="progress"><i style="width:59%"></i></div></td></tr>
+ </tbody></table></div></div>
+ <div class="card table-card"><div class="table-title"><h3>Últimas vendas</h3><span class="viewall" onclick="go('sales')">Ver todas →</span></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Produto</th><th>Data</th><th>Valor</th><th>Status</th></tr></thead><tbody>
+ <tr><td>Marina Costa</td><td>Automação Pro</td><td>27/09/26</td><td>R$ 2.490</td><td><span class="badge paid">Pago</span></td></tr>
+ <tr><td>Lucas Mendes</td><td>Site Premium</td><td>26/09/26</td><td>R$ 3.190</td><td><span class="badge pending">Pendente</span></td></tr>
+ <tr><td>Agência Norte</td><td>Consultoria Growth</td><td>25/09/26</td><td>R$ 4.800</td><td><span class="badge paid">Pago</span></td></tr>
+ <tr><td>Rafael Lima</td><td>Automação Pro</td><td>24/09/26</td><td>R$ 2.490</td><td><span class="badge cancelled">Cancelado</span></td></tr>
+ </tbody></table></div></div>
+</div>
+<div class="secondary-grid">
+ <div class="card secondary"><span>CONVERSÃO</span><strong>7,8%</strong><div class="spark"><i style="width:78%"></i></div></div>
+ <div class="card secondary"><span>CLIENTES ATIVOS</span><strong>1.284</strong><div class="spark"><i style="width:64%"></i></div></div>
+ <div class="card secondary"><span>PEDIDOS</span><strong>73</strong><div class="spark"><i style="width:73%"></i></div></div>
+ <div class="card secondary"><span>PRODUTOS VENDIDOS</span><strong>128</strong><div class="spark"><i style="width:82%"></i></div></div>
+</div>
+</section>
+
+<section id="sales" class="page"><div class="card table-card"><div class="table-title"><h3>Vendas</h3><span class="role-pill">46 registros demonstrativos</span></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>Produto</th><th>Data</th><th>Valor</th><th>Status</th></tr></thead><tbody id="salesRows"></tbody></table></div></div></section>
+<section id="products" class="page"><div class="card table-card"><div class="table-title"><h3>Produtos</h3><button class="btn primary" onclick="quickAction('Criar produto')">+ Novo produto</button></div><div class="table-wrap"><table><thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Estoque</th><th>Status</th></tr></thead><tbody>
+<tr><td>Automação Pro</td><td>SaaS</td><td>R$ 2.490</td><td>∞</td><td><span class="badge paid">Ativo</span></td></tr><tr><td>Consultoria Growth</td><td>Serviço</td><td>R$ 4.800</td><td>∞</td><td><span class="badge paid">Ativo</span></td></tr><tr><td>Site Premium</td><td>Digital</td><td>R$ 3.190</td><td>∞</td><td><span class="badge paid">Ativo</span></td></tr>
+</tbody></table></div></div></section>
+<section id="customers" class="page"><div class="card table-card"><div class="table-title"><h3>Clientes</h3><button class="btn primary" onclick="quickAction('Adicionar cliente')">+ Novo cliente</button></div><div class="table-wrap"><table><thead><tr><th>Cliente</th><th>E-mail</th><th>Compras</th><th>Última compra</th><th>Status</th></tr></thead><tbody><tr><td>Marina Costa</td><td>marina@exemplo.com</td><td>8</td><td>27/09/26</td><td><span class="badge paid">Ativo</span></td></tr><tr><td>Lucas Mendes</td><td>lucas@exemplo.com</td><td>3</td><td>26/09/26</td><td><span class="badge paid">Ativo</span></td></tr><tr><td>Agência Norte</td><td>contato@agencianorte.com</td><td>12</td><td>25/09/26</td><td><span class="badge paid">Ativo</span></td></tr></tbody></table></div></div></section>
+<section id="orders" class="page"><div class="card table-card"><div class="table-title"><h3>Pedidos</h3></div><p style="color:var(--muted);font-size:13px">Central de pedidos demonstrativos, com status, valores e clientes.</p></div></section>
+<section id="finance" class="page"><div class="secondary-grid"><div class="card secondary"><span>SALDO DISPONÍVEL</span><strong>R$ 38.420</strong><div class="spark"><i style="width:76%"></i></div></div><div class="card secondary"><span>A RECEBER</span><strong>R$ 12.810</strong><div class="spark"><i style="width:45%"></i></div></div></div></section>
+<section id="reports" class="page"><div class="card chart-card"><div class="card-title"><div><h3>Relatórios</h3><p>Indicadores consolidados para análise do negócio.</p></div></div><div class="secondary-grid"><div class="card secondary"><span>RECEITA</span><strong>R$ 107 mil</strong></div><div class="card secondary"><span>VENDAS</span><strong>46</strong></div><div class="card secondary"><span>CONVERSÃO</span><strong>7,8%</strong></div><div class="card secondary"><span>CLIENTES</span><strong>1.284</strong></div></div></div></section>
+<section id="settings" class="page"><div class="card admin-panel" id="settingsContent"></div></section>
+</main>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal-backdrop" id="modal"><div class="modal"><h3 id="modalTitle">Acesso restrito</h3><p id="modalText"></p><div class="modal-actions"><button class="btn" onclick="closeModal()">Fechar</button></div></div></div>
+<script>
+let currentUser=null;
+async function api(url, options={}){
+  const r=await fetch(url,{credentials:"include",headers:{"Content-Type":"application/json",...(options.headers||{})},...options});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(data.message||data.error||"Erro na requisição");
+  return data;
+}
+async function loadSession(){
+  try{
+    const data=await api("/api/me");
+    currentUser=data.user; role=currentUser.role;
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("userName").textContent=currentUser.name;
+    document.getElementById("roleText").textContent=currentUser.role==="ADMIN"?"Administrador":"Usuário";
+    document.getElementById("avatar").textContent=currentUser.name.split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase();
+    await loadDashboardData();
+  }catch(e){
+    document.getElementById("loginScreen").style.display="flex";
+  }
+}
+async function loadDashboardData(){
+  try{
+    const d=await api("/api/dashboard");
+    document.querySelector(".metric:nth-child(1) h2").textContent=d.metrics.revenue;
+    document.querySelector(".metric:nth-child(2) h2").textContent=d.metrics.mrr;
+    document.querySelector(".metric:nth-child(3) h2").textContent=d.metrics.avgTicket;
+    document.querySelector(".metric:nth-child(4) h2").textContent=d.metrics.sales;
+  }catch(e){console.error(e)}
+}
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const err=document.getElementById("loginError");err.textContent="";
+  try{
+    const data=await api("/api/login",{method:"POST",body:JSON.stringify({email:document.getElementById("loginEmail").value,password:document.getElementById("loginPassword").value})});
+    currentUser=data.user; role=currentUser.role;
+    document.getElementById("loginScreen").style.display="none";
+    document.getElementById("userName").textContent=currentUser.name;
+    document.getElementById("roleText").textContent=currentUser.role==="ADMIN"?"Administrador":"Usuário";
+    document.getElementById("avatar").textContent=currentUser.name.split(/\s+/).map(x=>x[0]).slice(0,2).join("").toUpperCase();
+    await loadDashboardData();
+    showToast("Login realizado com sucesso");
+  }catch(e){err.textContent=e.message}
+});
+async function logout(){
+  await api("/api/logout",{method:"POST"}).catch(()=>{});
+  currentUser=null;
+  document.getElementById("loginScreen").style.display="flex";
+  document.getElementById("loginPassword").value="";
+}
+
+const demoSales=[
+["Marina Costa","Automação Pro","27/09/26","R$ 2.490","Pago"],["Lucas Mendes","Site Premium","26/09/26","R$ 3.190","Pendente"],["Agência Norte","Consultoria Growth","25/09/26","R$ 4.800","Pago"],["Rafael Lima","Automação Pro","24/09/26","R$ 2.490","Cancelado"],["Carla Souza","Site Premium","23/09/26","R$ 3.190","Pago"],["Pedro Alves","Consultoria Growth","22/09/26","R$ 4.800","Pago"]];
+const pageMeta={dashboard:["Dashboard","Visão geral do seu negócio"],sales:["Vendas","Acompanhe todas as transações"],products:["Produtos","Gerencie seu catálogo digital"],customers:["Clientes","Relacionamento e base de clientes"],orders:["Pedidos","Controle e acompanhamento de pedidos"],finance:["Financeiro","Visão financeira da operação"],reports:["Relatórios","Indicadores e análises"],settings:["Configurações","Administração e preferências"]};
+let role="ADMIN", chart;
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function statusBadge(s){return `<span class="badge ${s==="Pago"?"paid":s==="Pendente"?"pending":"cancelled"}">${s}</span>`}
+function fillSales(q=""){document.getElementById("salesRows").innerHTML=demoSales.filter(r=>r.join(" ").toLowerCase().includes(q.toLowerCase())).map(r=>`<tr>${r.slice(0,4).map(x=>`<td>${esc(x)}</td>`).join("")}<td>${statusBadge(r[4])}</td></tr>`).join("")}
+function go(page){
+ if(currentUser && currentUser.role==="USER" && page==="settings"){openModal("Acesso restrito","Acesso restrito. Esta função está disponível apenas para o administrador.");return}
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===page));
+ document.querySelectorAll(".nav button[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ document.getElementById("pageTitle").textContent=pageMeta[page][0];document.getElementById("pageSub").textContent=pageMeta[page][1];
+ document.getElementById("sidebar").classList.remove("open");window.scrollTo({top:0,behavior:"smooth"});
+ if(page==="sales")fillSales(document.getElementById("search").value);
+ if(page==="settings")renderSettings();
+}
+function renderSettings(){
+ const box=document.getElementById("settingsContent");
+ if(!currentUser || currentUser.role!=="ADMIN"){box.innerHTML=`<h3>Configurações</h3><p style="color:var(--muted)">Você está conectado como <b>Usuário</b>. Dados administrativos estão protegidos.</p><div class="setting"><div><b>Perfil administrativo</b><br><span>Nome, e-mail, senha e foto do administrador.</span></div><span class="lock">🔒 Somente leitura</span></div>`;return}
+ box.innerHTML=`<div class="card-title"><div><h3>Configurações administrativas</h3><p>Somente ADMIN pode alterar estas informações.</p></div><span class="role-pill">ADMIN</span></div>
+ <div class="setting"><div><b>Informações pessoais</b><br><span>Nome, e-mail, senha e foto de perfil.</span></div><button class="btn primary" onclick="showToast('Perfil salvo com sucesso')">Editar</button></div>
+ <div class="setting"><div><b>Usuários e permissões</b><br><span>Gerencie contas e níveis de acesso.</span></div><button class="btn primary" onclick="showToast('Gerenciador de usuários aberto')">Gerenciar</button></div>
+ <div class="setting"><div><b>Dados do dashboard</b><br><span>Editar métricas, produtos, clientes e vendas.</span></div><button class="btn primary" onclick="showToast('Editor de dados aberto')">Editar dados</button></div>
+ <div class="setting"><div><b>Segurança</b><br><span>RBAC, sessões e políticas administrativas.</span></div><button class="btn" onclick="showToast('Políticas de segurança carregadas')">Ver políticas</button></div>`;
+}
+async function switchRole(){showToast("As permissões reais são controladas pela conta no servidor.");}
+function quickAction(name){if(role==="USER" && ["Criar produto","Adicionar cliente","Criar proposta","Registrar venda"].includes(name)){openModal("Permissão necessária","Acesso restrito. Esta função precisa ser habilitada para o seu usuário pelo administrador.");return}showToast(name+" — ação iniciada")}
+function openModal(t,m){document.getElementById("modalTitle").textContent=t;document.getElementById("modalText").textContent=m;document.getElementById("modal").style.display="flex"}
+function closeModal(){document.getElementById("modal").style.display="none"}
+function openUserMenu(){
+ let m=document.getElementById("userMenu"); if(!m){m=document.createElement("div");m.id="userMenu";m.className="user-menu";m.innerHTML='<button onclick="go(\'settings\')">Configurações</button><button onclick="logout()">Sair da conta</button>';document.body.appendChild(m)}
+ m.style.display=m.style.display==="block"?"none":"block";
+}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("show");clearTimeout(window._toast);window._toast=setTimeout(()=>t.classList.remove("show"),2400)}
+document.querySelectorAll(".nav button[data-page]").forEach(b=>b.onclick=()=>go(b.dataset.page));
+document.getElementById("search").addEventListener("input",e=>fillSales(e.target.value));
+const datasets={
+ today:{labels:["08h","10h","12h","14h","16h"],data:[420,760,680,1120,1490]},
+ 7:{labels:["Seg","Ter","Qua","Qui","Sex","Sáb","Dom"],data:[3100,4200,3800,5900,4700,7200,6100]},
+ 30:{labels:["01","05","10","15","20","25","30"],data:[12400,18100,13900,22500,19400,27200,31800]},
+ "6m":{labels:["Abr","Mai","Jun","Jul","Ago","Set"],data:[21800,26300,24200,31900,38200,45100]},
+ "1y":{labels:["Out","Nov","Dez","Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set"],data:[11200,13600,12900,16800,19400,22100,21800,26300,24200,31900,38200,45100]},
+ all:{labels:["2024","Q1/25","Q2/25","Q3/25","Q4/25","Q1/26","Q2/26","Set/26"],data:[8200,24100,31900,42700,55800,69400,87300,107138]}
+};
+function renderChart(key="30"){const d=datasets[key];const ctx=document.getElementById("revenueChart");if(chart)chart.destroy();chart=new Chart(ctx,{type:"line",data:{labels:d.labels,datasets:[{data:d.data,borderColor:"#2491FF",backgroundColor:"rgba(22,119,255,.16)",borderWidth:2.5,pointRadius:3,pointBackgroundColor:"#2491FF",pointBorderWidth:0,tension:.4,fill:true}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{displayColors:false,backgroundColor:"#0b1118",borderColor:"#1e3b59",borderWidth:1,callbacks:{label:c=>" R$ "+c.raw.toLocaleString("pt-BR")}}},scales:{x:{grid:{color:"rgba(255,255,255,.035)"},ticks:{color:"#6f7c8c",font:{size:10}}},y:{grid:{color:"rgba(255,255,255,.035)"},ticks:{color:"#6f7c8c",font:{size:10},callback:v=>"R$ "+(v/1000).toFixed(0)+"k"}}}}})}
+document.querySelectorAll("#periods button").forEach(b=>b.onclick=()=>{document.querySelectorAll("#periods button").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderChart(b.dataset.range)});
+fillSales();renderChart();loadSession();
+</script>
+</body>
+</html>
