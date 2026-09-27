@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: bluesales
+      POSTGRES_USER: bluesales
+      POSTGRES_PASSWORD: change-this-db-password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      PORT: 3000
+      DATABASE_URL: postgresql://bluesales:change-this-db-password@db:5432/bluesales
+      SESSION_SECRET: change-this-session-secret
+      APP_URL: http://localhost:3000
+      ADMIN_INITIAL_PASSWORD: Admin@123
+    ports:
+      - "3000:3000"
+volumes:
+  pgdata:
