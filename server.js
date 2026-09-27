@@ -147,8 +147,10 @@ app.use((err,req,res,next)=>{
  res.status(500).json({message:"Erro interno do servidor."});
 });
 async function startServer() {
-  try {await q(fs.readFileSync("schema.sql", "utf8"));
-console.log("BANCO DE DADOS INICIALIZADO.");
+  try {
+    await q(fs.readFileSync("schema.sql", "utf8"));
+    console.log("BANCO DE DADOS INICIALIZADO.");
+
     if (process.env.RESET_ADMIN_PASSWORD === "true") {
       const password = process.env.ADMIN_INITIAL_PASSWORD;
 
@@ -163,20 +165,18 @@ console.log("BANCO DE DADOS INICIALIZADO.");
          SET password_hash=$1, role='ADMIN', active=true
          WHERE lower(email)=lower($2)
          RETURNING id`,
-        [hash, "admin@bluesales.local"]                                                                                                                                                    
-       
-        if (result.rowCount === 0) {
-  await q(
-    `INSERT INTO users
-      (name, email, password_hash, role, active)
-     VALUES ($1, $2, $3, 'ADMIN', true)`,
-    ["Administrador", "admin@bluesales.local", hash]
-  );
+        [hash, "admin@bluesales.local"]
+      );
 
-  console.log("ADMINISTRADOR CRIADO COM SUCESSO.");
-} else {
-  console.log("SENHA DO ADMINISTRADOR REDEFINIDA COM SUCESSO.");
-}
+      if (result.rowCount === 0) {
+        await q(
+          `INSERT INTO users
+            (name, email, password_hash, role, active)
+           VALUES ($1, $2, $3, 'ADMIN', true)`,
+          ["Administrador", "admin@bluesales.local", hash]
+        );
+
+        console.log("ADMINISTRADOR CRIADO COM SUCESSO.");
       } else {
         console.log("SENHA DO ADMINISTRADOR REDEFINIDA COM SUCESSO.");
       }
